@@ -3,8 +3,8 @@ from pymongo import MongoClient
 def diHola():
     return ' Clara'
 
+client = MongoClient()
 def connectCollection(database, collection):
-    client = MongoClient()
     db = client[database]
     coll = db[collection]
     return db, coll
