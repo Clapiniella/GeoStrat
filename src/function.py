@@ -1,13 +1,41 @@
 from pymongo import MongoClient
+import folium
+from haversine import haversine
+import googlemaps
+from datetime import datetime
+import os
+from dotenv import load_dotenv
+load_dotenv()
+import requests, json 
+import time
+import pandas as pd
 
-def diHola():
-    return ' Clara'
+def diHola(nombre):
+    return 'Hola' + ' ' + nombre
 
 client = MongoClient()
 def connectCollection(database, collection):
     db = client[database]
     coll = db[collection]
     return db, coll
+
+def geoquery(geoindex,distance,col):
+    points= col.find(
+        {"location": 
+         {"$near": 
+          {"$geometry":
+           geoindex,
+           "$maxDistance":distance
+            }
+        }
+    })
+    return list(points)
+
+def mapping(coords,name,ic_type,ic_color,mapito):
+    return folium.Marker(coords,
+                        radius=1,popup=name,
+                        icon=folium.Icon(icon=ic_type,color=ic_color), 
+                       ).add_to(mapito)
 
 def createDF(query):
     ind=[]
@@ -38,3 +66,56 @@ def createDF(query):
          "money_raised":money_raised}
     new_DF=pd.DataFrame(dic)
     return new_DF
+
+def getcoord(query,lat,long):
+    for que in query: 
+        lat.append(que['location']['coordinates'][1])
+        long.append(que['location']['coordinates'][0])
+    return len(lat),len(long)   
+
+def harver(elem,zipi):
+    comparator=[]
+    for a in zipi:
+        comparator.append(haversine(elem,a))
+    return min(comparator)
+
+def nearbyAPI(location, radius, keyword):
+        url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
+        places = []
+        params = {
+            'location': location,
+            'radius': radius,
+            'keyword': keyword,
+            'key': os.getenv("API_KEY")
+        }
+        res = requests.get(url, params = params)
+        results =  json.loads(res.content)
+        places.extend(results['results'])
+        while "next_page_token" in results:
+            params['pagetoken'] = results['next_page_token'],
+            res = requests.get(url, params = params)
+            results = json.loads(res.content)
+            places.extend(results['results'])
+        return places 
+
+def createApiDf(query):
+    name=[]
+    long=[]
+    lat=[]
+    for location in query:
+        for starbucks in location:
+            name.append(starbucks['name'])
+            long.append(starbucks['geometry']['location']['lng'])
+            lat.append(starbucks['geometry']['location']['lat'])
+    dic2={"name":name,"long":long,"lat":lat}
+    lil_DF=pd.DataFrame(dic2)
+    return lil_DF 
+
+def getApiLoc(off):
+    longitude = off['long']
+    latitude = off['lat']
+    loc=({
+        'type':'Point',
+        'coordinates':[longitude,latitude]
+    })
+    return loc
