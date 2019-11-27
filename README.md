@@ -25,18 +25,18 @@ I did also use the Harversine function, since it takes a couple of coordinates a
 
 By this point, I got a dataframe with 99 rows, and a column for the different requirements and distances. Once I had this, I calculated a weighing table regarding the number of employees in the company who wanted each of the requirements. Using the table below, I could get a dataframe with a total column, which I used to sort this dataframe and get the 5 preferred companies and locations. 
 
- 	  num 	wot 	              they want 	        weighing
-0 	20 	Designers 	          Design companies 	  0.229885
-1 	5 	UI/UX Engineers 	    Post-its 	          0.057471
-2 	10 	Frontend Developers 	Startups 1M$ 	      0.114943
-3 	15 	Data Engineers 	      Projects 	          0.172414
-4 	5 	Backend Developers 	  Startups 1M$ 	      0.057471
-5 	20 	Account Managers 	    airport 	          0.229885
-6 	1 	Maintenance guy 	    Basketball 	        0.011494
-7 	10 	Executives 	          starbucks 	        0.114943
-8 	1 	CEO 	                veggies 	          0.011494
-9 	26 	Parents 	            schools 	          0.300000
-10 	87 	All 	                party 	            1.000000
+ 	  num 	wot 	                  they want 	      weighing 
+      0 	20 	Designers 	          Design companies 	  0.229885
+      1 	5 	UI/UX Engineers 	  Post-its 	          0.057471
+      2 	10 	Frontend Developers   Startups 1M$ 	      0.114943
+      3 	15 	Data Engineers 	      Projects 	          0.172414
+      4 	5 	Backend Developers 	  Startups 1M$ 	      0.057471
+      5 	20 	Account Managers 	  airport 	          0.229885
+      6 	1 	Maintenance guy 	  Basketball 	      0.011494
+      7 	10 	Executives 	          starbucks 	      0.114943
+      8 	1 	CEO 	              veggies 	          0.011494
+      9 	26 	Parents 	          schools 	          0.300000
+      10 	87 	All 	              party 	          1.000000
 
 Getting the highest punctuation, 81 points, I could get the perfect location which is: 
 
